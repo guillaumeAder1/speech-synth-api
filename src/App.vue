@@ -19,6 +19,11 @@
         <input-text :defaultvalue="'type here'" :callback="textCallback"/>
         
       </template>
+
+      <div v-if="listVoice.length > 0">
+         <drop-down :items="listVoice" :label="'voice'" :callback="voiceCallback"/>
+      </div>
+
       <template v-if="isValid">
         <button class="button" @click="speak">start</button>
       </template>
@@ -39,7 +44,7 @@ export default {
     return {
       header: "Compatible with this browser!",
       voices: [],
-      loaded: false,
+      listVoice: [],
       voiceSelected: false,
       text: false,
       msg: null
@@ -59,15 +64,11 @@ export default {
       this.msg.text = this.text;
       this.msg.volume = 1;
       this.msg.pitch = 1;
-      this.msg.rate = 1;
+      this.msg.rate = 0.1;
       this.msg.voice = this.voiceSelected;
       window.speechSynthesis.speak(this.msg);
     },
-    getVoiceList() {
-      this.voices = window.speechSynthesis.getVoices();
-      this.loaded = true;
-      this.voices.length && clearInterval(this.$timer); // if voices foudn, remove interval
-    },
+
     textCallback(str) {
       console.log(str);
       this.text = str.trim() !== "" ? str : false;
@@ -78,16 +79,15 @@ export default {
     }
   },
   mounted() {
+    this.msg = new SpeechSynthesisUtterance();
     /**
      * wait until chrome loads voices...
      */
-    this.msg = new SpeechSynthesisUtterance();
-    if (!this.voices.length) {
-      this.$timer = setInterval(e => {
-        this.getVoiceList();
-        console.log("Time");
-      }, 500);
-    }
+    new Promise(resolve => {
+      window.speechSynthesis.onvoiceschanged = function() {
+        resolve(window.speechSynthesis.getVoices());
+      };
+    }).then(voices => (this.voices = voices));
   }
 };
 </script>
