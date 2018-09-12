@@ -1,6 +1,8 @@
 # speech-synth
 
-> A Vue.js project
+> A Vue.js project for Speech Synthesis API
+
+[live demo](https://guillaumeader1.github.io/speech-synth-api/)
 
 ## Build Setup
 
