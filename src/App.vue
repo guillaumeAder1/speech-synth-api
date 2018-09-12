@@ -29,15 +29,15 @@
       <section>
         <div class="columns">
           <div class="column">
-            <fader-control></fader-control>
+            <fader-control :defvalue="volume" param="volume"></fader-control>
             <p class="notification is-info ">volume</p>
           </div>
           <div class="column">
-            <fader-control></fader-control>
+            <fader-control :defvalue="pitch" param='pitch'></fader-control>
             <p class="notification is-info">pitch</p>
           </div>
           <div class="column">
-            <fader-control></fader-control>
+            <fader-control :defvalue="rate" param='rate'></fader-control>
             <p class="notification is-info">rate</p>
           </div>
          
@@ -67,7 +67,10 @@ export default {
       voices: [],
       voiceSelected: false,
       text: false,
-      msg: null
+      msg: null,
+      pitch: 1,
+      rate: 1,
+      volume: 0.75
     };
   },
 
@@ -82,9 +85,9 @@ export default {
   methods: {
     speak() {
       this.msg.text = this.text;
-      this.msg.volume = 1;
-      this.msg.pitch = 1;
-      this.msg.rate = 0.1;
+      this.msg.volume = this.volume;
+      this.msg.pitch = this.pitch;
+      this.msg.rate = this.rate;
       this.msg.voice = this.voiceSelected;
       window.speechSynthesis.speak(this.msg);
     },
