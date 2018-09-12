@@ -1,11 +1,14 @@
 <template>    
-    <input type="text" class="input is-info" placeholder="textStr" v-model="str" @keyup="callback(str)" @blur="callback(str)"/>
+    <input type="text" class="input is-info" v-bind="$attrs" v-model="str" @keyup="callback(str)" @blur="callback(str)"/>
 </template>
 
 <script>
 export default {
   name: "BaseInput",
-  props: ["defaultvalue", "callback"],
+  props: {
+    defaultvalue: String,
+    callback: Function
+  },
   data() {
     return {
       textStr: this.defaultvalue,
@@ -16,7 +19,4 @@ export default {
 </script>
 
 <style scoped>
-.input {
-  width: 50%;
-}
 </style>
